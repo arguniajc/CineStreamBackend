@@ -5,6 +5,7 @@ exports.create = async (data) => {
   try {
     return await Actor.create(data);
   } catch (err) {
+    //Validar si el actor ya existe
     if (err.name === "SequelizeUniqueConstraintError") {
       const valor = data?.nombre || "[nombre no disponible]";
       throw new Error(`El actor "${valor}" ya está registrado.`);
