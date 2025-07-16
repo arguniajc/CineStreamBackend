@@ -6,15 +6,28 @@ module.exports = (sequelize, DataTypes) => {
     },
     id_actor: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
     },
     personaje: {
-      type: DataTypes.STRING(255)
+      type: DataTypes.STRING(255),
     }
   }, {
     tableName: "pelicula_actor",
-    timestamps: false
+    timestamps: false,
   });
+
+  // Asociaciones (IMPORTANTE)
+  PeliculaActor.associate = (models) => {
+    PeliculaActor.belongsTo(models.Actor, {
+      foreignKey: "id_actor",
+      as: "actor",
+    });
+
+    PeliculaActor.belongsTo(models.Pelicula, {
+      foreignKey: "id_pelicula",
+      as: "pelicula",
+    });
+  };
 
   return PeliculaActor;
 };

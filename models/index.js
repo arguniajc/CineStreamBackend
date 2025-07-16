@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const dbConfig = require("../config/db.config");
 
-// 💡 Aquí activamos SSL para Render
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   port: dbConfig.port,
@@ -9,7 +8,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false // permite certificados autofirmados
+      rejectUnauthorized: false
     }
   },
   pool: dbConfig.pool,
@@ -21,7 +20,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Importar modelos
+// Modelos principales
 db.Pelicula = require("./pelicula.model")(sequelize, DataTypes);
 db.Actor = require("./actor.model")(sequelize, DataTypes);
 db.Director = require("./director.model")(sequelize, DataTypes);
@@ -29,6 +28,7 @@ db.Compania = require("./compania.model")(sequelize, DataTypes);
 db.Genero = require("./genero.model")(sequelize, DataTypes);
 db.Idioma = require("./idioma.model")(sequelize, DataTypes);
 
+// Tablas intermedias
 db.PeliculaActor = require("./pelicula_actor.model")(sequelize, DataTypes);
 db.PeliculaDirector = require("./pelicula_director.model")(sequelize, DataTypes);
 db.PeliculaCompania = require("./pelicula_compania.model")(sequelize, DataTypes);
@@ -39,7 +39,7 @@ db.PeliculaIdioma = require("./pelicula_idioma.model")(sequelize, DataTypes);
 // RELACIONES
 //
 
-// Pelicula - Actor (Muchos a muchos)
+// Pelicula - Actor
 db.Pelicula.belongsToMany(db.Actor, {
   through: db.PeliculaActor,
   foreignKey: "id_pelicula",
@@ -50,6 +50,8 @@ db.Actor.belongsToMany(db.Pelicula, {
   foreignKey: "id_actor",
   otherKey: "id_pelicula"
 });
+db.PeliculaActor.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "peliculaActor" });
+db.PeliculaActor.belongsTo(db.Actor, { foreignKey: "id_actor", as: "actor" });
 
 // Pelicula - Director
 db.Pelicula.belongsToMany(db.Director, {
@@ -62,6 +64,8 @@ db.Director.belongsToMany(db.Pelicula, {
   foreignKey: "id_director",
   otherKey: "id_pelicula"
 });
+db.PeliculaDirector.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "peliculaDirector" });
+db.PeliculaDirector.belongsTo(db.Director, { foreignKey: "id_director", as: "director" });
 
 // Pelicula - Compania
 db.Pelicula.belongsToMany(db.Compania, {
@@ -74,6 +78,8 @@ db.Compania.belongsToMany(db.Pelicula, {
   foreignKey: "id_compania",
   otherKey: "id_pelicula"
 });
+db.PeliculaCompania.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "peliculaCompania" });
+db.PeliculaCompania.belongsTo(db.Compania, { foreignKey: "id_compania", as: "compania" });
 
 // Pelicula - Genero
 db.Pelicula.belongsToMany(db.Genero, {
@@ -85,6 +91,17 @@ db.Genero.belongsToMany(db.Pelicula, {
   through: db.PeliculaGenero,
   foreignKey: "id_genero",
   otherKey: "id_pelicula"
+});
+// Relación PeliculaGenero -> Pelicula
+db.PeliculaGenero.belongsTo(db.Pelicula, {
+  foreignKey: "id_pelicula",
+  as: "peliculaGenero"
+});
+
+// Relación PeliculaGenero -> Genero
+db.PeliculaGenero.belongsTo(db.Genero, {
+  foreignKey: "id_genero",
+  as: "genero"
 });
 
 // Pelicula - Idioma
@@ -98,5 +115,7 @@ db.Idioma.belongsToMany(db.Pelicula, {
   foreignKey: "id_idioma",
   otherKey: "id_pelicula"
 });
+db.PeliculaIdioma.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "peliculaIdioma" });
+db.PeliculaIdioma.belongsTo(db.Idioma, { foreignKey: "id_idioma", as: "idioma" });
 
 module.exports = db;
