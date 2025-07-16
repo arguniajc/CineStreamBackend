@@ -13,6 +13,9 @@ app.use("/api/actores", actorRoutes);
 const directorRoutes = require("./routes/director.routes");
 app.use("/api/directores", directorRoutes);
 
+const companiaRoutes = require("./routes/compania.routes");
+app.use("/api/compania", companiaRoutes);
+
 const peliculaRoutes = require("./routes/pelicula.routes");
 app.use("/api/peliculas", peliculaRoutes);
 
