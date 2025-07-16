@@ -6,15 +6,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Importar rutas
-const peliculaRoutes = require("./routes/pelicula.routes");
-app.use("/api/peliculas", peliculaRoutes);
-
+// Rutas
 const actorRoutes = require("./routes/actor.routes");
 app.use("/api/actores", actorRoutes);
 
+const directorRoutes = require("./routes/director.routes");
+app.use("/api/directores", directorRoutes);
 
-// Sincronizar la base de datos
+const peliculaRoutes = require("./routes/pelicula.routes");
+app.use("/api/peliculas", peliculaRoutes);
+
+// Sincronización de base de datos
 db.sequelize.sync().then(() => {
   console.log("Base de datos sincronizada");
 });
