@@ -1,17 +1,9 @@
 const db = require("../models");
 const Compania = db.Compania;
+const insertarSinDuplicados = require("../utils/insertarSinDuplicados");
 
 exports.create = async (data) => {
-  try {
-    return await Compania.create(data);
-  } catch (err) {
-    //Validar si la compañia ya existe
-    if (err.name === "SequelizeUniqueConstraintError") {
-      const valor = data?.nombre || "[nombre no disponible]";
-      throw new Error(`La compañia "${valor}" ya está registrada.`);
-    }
-    throw err;
-  }
+  return await insertarSinDuplicados(Compania, "nombre", data);
 };
 
 exports.findAll = async () => {

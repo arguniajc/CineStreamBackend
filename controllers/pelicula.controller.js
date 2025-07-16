@@ -1,16 +1,29 @@
 const peliculaService = require("../services/pelicula.service");
 
-// Crear
 exports.create = async (req, res) => {
   try {
     const result = await peliculaService.create(req.body);
-    res.status(201).json(result);
+
+    if (Array.isArray(req.body)) {
+      if (result.insertados.length === 0 && result.omitidos.length > 0) {
+        return res.status(409).json({
+          mensaje: "Todas las películas ya estaban registradas.",
+          omitidos: result.omitidos
+        });
+      }
+      return res.status(201).json(result);
+    }
+
+    return res.status(201).json(result);
+
   } catch (err) {
+    if (err.message && err.message.includes("ya está registrada")) {
+      return res.status(409).json({ error: err.message });
+    }
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtener todas
 exports.findAll = async (req, res) => {
   try {
     const result = await peliculaService.findAll();
@@ -20,7 +33,6 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Obtener una por ID
 exports.findOne = async (req, res) => {
   try {
     const result = await peliculaService.findOne(req.params.id);
@@ -31,7 +43,6 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Actualizar
 exports.update = async (req, res) => {
   try {
     const result = await peliculaService.update(req.params.id, req.body);
@@ -41,7 +52,6 @@ exports.update = async (req, res) => {
   }
 };
 
-// Eliminar
 exports.delete = async (req, res) => {
   try {
     await peliculaService.remove(req.params.id);

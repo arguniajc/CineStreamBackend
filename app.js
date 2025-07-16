@@ -19,6 +19,9 @@ app.use("/api/compania", companiaRoutes);
 const peliculaRoutes = require("./routes/pelicula.routes");
 app.use("/api/peliculas", peliculaRoutes);
 
+const generoRoutes = require("./routes/genero.routes");
+app.use("/api/genero", generoRoutes);
+
 // Sincronización de base de datos
 db.sequelize.sync().then(() => {
   console.log("Base de datos sincronizada");

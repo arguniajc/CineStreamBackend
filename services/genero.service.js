@@ -1,27 +1,23 @@
 const db = require("../models");
-const Actor = db.Actor;
+const Genero = db.Genero;
 const insertarSinDuplicados = require("../utils/insertarSinDuplicados");
 
 exports.create = async (data) => {
-  return await insertarSinDuplicados(Actor, "nombre", data);
+  return await insertarSinDuplicados(Genero, "nombre", data);
 };
 
 exports.findAll = async () => {
-  return await Actor.findAll();
+  return await Genero.findAll();
 };
 
 exports.findOne = async (id) => {
-  return await Actor.findByPk(id);
+  return await Genero.findByPk(id);
 };
 
 exports.update = async (id, data) => {
-  return await Actor.update(data, {
-    where: { id }
-  });
+  return await Genero.update(data, { where: { id } });
 };
 
 exports.remove = async (id) => {
-  return await Actor.destroy({
-    where: { id }
-  });
+  return await Genero.destroy({ where: { id } });
 };

@@ -1,17 +1,9 @@
 const db = require("../models");
 const Director = db.Director;
+const insertarSinDuplicados = require("../utils/insertarSinDuplicados");
 
 exports.create = async (data) => {
-  try {
-    return await Director.create(data);
-  } catch (err) {
-    //Validar si el director ya existe
-    if (err.name === "SequelizeUniqueConstraintError") {
-      const valor = data?.nombre || "[nombre no disponible]";
-      throw new Error(`El director "${valor}" ya está registrado.`);
-    }
-    throw err;
-  }
+  return await insertarSinDuplicados(Director, "nombre", data);
 };
 
 exports.findAll = async () => {

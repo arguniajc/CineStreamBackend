@@ -1,9 +1,10 @@
 const db = require("../models");
 const Pelicula = db.Pelicula;
+const insertarSinDuplicados = require("../utils/insertarSinDuplicados");
 
-// Crear película
+// Crear película (evitando duplicados por título)
 exports.create = async (data) => {
-  return await Pelicula.create(data);
+  return await insertarSinDuplicados(Pelicula, "titulo", data);
 };
 
 // Obtener todas las películas (incluyendo relaciones)

@@ -1,17 +1,28 @@
 const actorService = require("../services/actor.service");
 
-
 exports.create = async (req, res) => {
   try {
     const result = await actorService.create(req.body);
-    res.status(201).json(result);
+
+    if (Array.isArray(req.body)) {
+      if (result.insertados.length === 0 && result.omitidos.length > 0) {
+        return res.status(409).json({
+          mensaje: "Todos los actores ya estaban registrados.",
+          omitidos: result.omitidos
+        });
+      }
+      return res.status(201).json(result);
+    }
+
+    return res.status(201).json(result);
+
   } catch (err) {
     if (err.message && err.message.includes("ya está registrado")) {
       return res.status(409).json({ error: err.message });
     }
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 exports.findAll = async (req, res) => {
   try {

@@ -1,13 +1,13 @@
-const companiaService = require("../services/compania.service");
+const generoService = require("../services/genero.service");
 
 exports.create = async (req, res) => {
   try {
-    const result = await companiaService.create(req.body);
+    const result = await generoService.create(req.body);
 
     if (Array.isArray(req.body)) {
       if (result.insertados.length === 0 && result.omitidos.length > 0) {
         return res.status(409).json({
-          mensaje: "Todas las compañías ya estaban registradas.",
+          mensaje: "Todos los géneros ya estaban registrados.",
           omitidos: result.omitidos
         });
       }
@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
     return res.status(201).json(result);
 
   } catch (err) {
-    if (err.message && err.message.includes("ya está registrada")) {
+    if (err.message.includes("ya está registrado")) {
       return res.status(409).json({ error: err.message });
     }
     res.status(500).json({ error: err.message });
@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const result = await companiaService.findAll();
+    const result = await generoService.findAll();
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -35,8 +35,8 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const result = await companiaService.findOne(req.params.id);
-    if (!result) return res.status(404).json({ message: "Compañía no encontrada" });
+    const result = await generoService.findOne(req.params.id);
+    if (!result) return res.status(404).json({ message: "Género no encontrado" });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -45,8 +45,8 @@ exports.findOne = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const result = await companiaService.update(req.params.id, req.body);
-    res.json({ message: "Compañía actualizada", result });
+    const result = await generoService.update(req.params.id, req.body);
+    res.json({ message: "Género actualizado", result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -54,8 +54,8 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    await companiaService.remove(req.params.id);
-    res.json({ message: "Compañía eliminada" });
+    await generoService.remove(req.params.id);
+    res.json({ message: "Género eliminado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
