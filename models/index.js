@@ -50,8 +50,19 @@ db.Actor.belongsToMany(db.Pelicula, {
   foreignKey: "id_actor",
   otherKey: "id_pelicula"
 });
-db.PeliculaActor.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "peliculaActor" });
-db.PeliculaActor.belongsTo(db.Actor, { foreignKey: "id_actor", as: "actor" });
+
+
+// Relación correcta para PeliculaActor
+db.PeliculaActor.belongsTo(db.Pelicula, {
+  foreignKey: "id_pelicula",
+  as: "pelicula"
+});
+
+db.PeliculaActor.belongsTo(db.Actor, {
+  foreignKey: "id_actor",
+  as: "actor"
+});
+
 
 // Pelicula - Director
 db.Pelicula.belongsToMany(db.Director, {
