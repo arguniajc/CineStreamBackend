@@ -17,8 +17,6 @@ exports.create = async (req, res) => {
 };
 
 // ✅ Update que permite cambiar ID del actor o película
-// controllers/pelicula_actor.controller.js
-
 exports.update = async (req, res) => {
   const { id_pelicula, id_actor } = req.params;
   const nuevosDatos = req.body;
@@ -27,12 +25,14 @@ exports.update = async (req, res) => {
     const resultado = await service.update(id_pelicula, id_actor, nuevosDatos);
     res.json(resultado);
   } catch (error) {
-    res.status(500).json({
-      error: "Error al actualizar la relación",
-      detalle: error.message
-    });
+    if (error.message === "La nueva relación ya existe") {
+      res.status(400).json({ error: "Esta combinación de película y actor ya está registrada" });
+    } else {
+      res.status(500).json({ error: "Error al actualizar la relación", detalle: error.message });
+    }
   }
 };
+
 
 
 exports.remove = async (req, res) => {

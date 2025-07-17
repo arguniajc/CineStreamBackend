@@ -51,40 +51,29 @@ exports.create = async (data) => {
 exports.update = async (id_pelicula, id_actor, nuevosDatos) => {
   const transaction = await db.sequelize.transaction();
   try {
-    const { id_pelicula: nuevaPelicula, id_actor: nuevoActor, personaje } = nuevosDatos;
-
-    // Si los IDs no cambian, solo actualiza el personaje
-    if (id_pelicula == nuevaPelicula && id_actor == nuevoActor) {
-      const relacion = await PeliculaActor.findOne({ where: { id_pelicula, id_actor }, transaction });
-      if (!relacion) throw new Error("Relación original no encontrada");
-
-      await relacion.update({ personaje }, { transaction });
-      await transaction.commit();
-      return relacion;
-    }
-
-    // Verifica si la nueva relación ya existe
-    const existente = await PeliculaActor.findOne({
-      where: { id_pelicula: nuevaPelicula, id_actor: nuevoActor },
-      transaction
+    // 1. Verifica si ya existe la relación nueva (para evitar duplicados)
+    const yaExiste = await PeliculaActor.findOne({
+      where: {
+        id_pelicula: nuevosDatos.id_pelicula,
+        id_actor: nuevosDatos.id_actor
+      }
     });
 
-    if (existente) {
-      // Actualiza solo el personaje en la existente
-      await existente.update({ personaje }, { transaction });
-    } else {
-      // Crea nueva relación con los nuevos IDs
-      await PeliculaActor.create(nuevosDatos, { transaction });
+    if (yaExiste) {
+      throw new Error("La nueva relación ya existe");
     }
 
-    // Elimina la anterior relación
+    // 2. Elimina la anterior
     await PeliculaActor.destroy({
       where: { id_pelicula, id_actor },
       transaction
     });
 
+    // 3. Crea la nueva
+    const nuevaRelacion = await PeliculaActor.create(nuevosDatos, { transaction });
+
     await transaction.commit();
-    return nuevosDatos;
+    return nuevaRelacion;
   } catch (error) {
     await transaction.rollback();
     throw error;
