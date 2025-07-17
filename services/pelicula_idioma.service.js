@@ -6,7 +6,7 @@ const Idioma = db.Idioma;
 exports.findAll = async () => {
   const data = await PeliculaIdioma.findAll({
     include: [
-      { model: Pelicula, as: "peliculaIdioma", attributes: ["id", "titulo_espanol"] },
+      { model: Pelicula, as: "pelicula", attributes: ["id", "titulo_espanol"] },
       { model: Idioma, as: "idioma", attributes: ["id", "nombre"] }
     ]
   });
@@ -14,7 +14,7 @@ exports.findAll = async () => {
   return data.map(item => ({
     id_pelicula: item.id_pelicula,
     id_idioma: item.id_idioma,
-    titulo_pelicula: item.peliculaIdioma?.titulo_espanol || "",
+    titulo_pelicula: item.pelicula?.titulo_espanol || "",
     nombre_idioma: item.idioma?.nombre || ""
   }));
 };
@@ -23,7 +23,7 @@ exports.findOne = async (id_pelicula, id_idioma) => {
   const item = await PeliculaIdioma.findOne({
     where: { id_pelicula, id_idioma },
     include: [
-      { model: Pelicula, as: "peliculaIdioma", attributes: ["id", "titulo_espanol"] },
+      { model: Pelicula, as: "pelicula", attributes: ["id", "titulo_espanol"] },
       { model: Idioma, as: "idioma", attributes: ["id", "nombre"] }
     ]
   });
@@ -32,7 +32,7 @@ exports.findOne = async (id_pelicula, id_idioma) => {
     ? {
         id_pelicula: item.id_pelicula,
         id_idioma: item.id_idioma,
-        titulo_pelicula: item.peliculaIdioma?.titulo_espanol || "",
+        titulo_pelicula: item.pelicula?.titulo_espanol || "",
         nombre_idioma: item.idioma?.nombre || ""
       }
     : null;

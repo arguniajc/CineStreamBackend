@@ -6,7 +6,7 @@ const Genero = db.Genero;
 exports.findAll = async () => {
   const data = await PeliculaGenero.findAll({
     include: [
-      { model: Pelicula, as: "peliculaGenero", attributes: ["id", "titulo_espanol"] },
+      { model: Pelicula, as: "pelicula", attributes: ["id", "titulo_espanol"] },
       { model: Genero, as: "genero", attributes: ["id", "nombre"] }
     ]
   });
@@ -14,19 +14,28 @@ exports.findAll = async () => {
   return data.map(item => ({
     id_pelicula: item.id_pelicula,
     id_genero: item.id_genero,
-    titulo_pelicula: item.peliculaGenero?.titulo_espanol || "",
+    titulo_pelicula: item.pelicula?.titulo_espanol || "",
     nombre_genero: item.genero?.nombre || ""
   }));
 };
 
 exports.findOne = async (id_pelicula, id_genero) => {
-  return await PeliculaGenero.findOne({
+  const item = await PeliculaGenero.findOne({
     where: { id_pelicula, id_genero },
     include: [
       { model: Pelicula, as: "pelicula", attributes: ["id", "titulo_espanol"] },
       { model: Genero, as: "genero", attributes: ["id", "nombre"] }
     ]
   });
+
+  return item
+    ? {
+        id_pelicula: item.id_pelicula,
+        id_genero: item.id_genero,
+        titulo_pelicula: item.pelicula?.titulo_espanol || "",
+        nombre_genero: item.genero?.nombre || ""
+      }
+    : null;
 };
 
 exports.create = async (data) => {

@@ -28,8 +28,9 @@ app.use("/api/idioma", idiomaRoutes);
 const peliculaActorRoutes = require("./routes/pelicula_actor.route");
 app.use("/api/pelicula-actor", peliculaActorRoutes);
 
+
 const peliculaDirectorRoutes = require("./routes/pelicula_director.routes");
-app.use("/api/pelicula-director", peliculaDirectorRoutes);
+app.use("/api/pelicula_director", peliculaDirectorRoutes);
 
 const peliculaCompaniaRoutes = require("./routes/pelicula_compania.route");
 app.use("/api/pelicula-compania", peliculaCompaniaRoutes);
