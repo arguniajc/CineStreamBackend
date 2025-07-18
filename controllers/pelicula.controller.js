@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
     return res.status(201).json(result);
 
   } catch (err) {
-    if (err.message && err.message.includes("ya está registrada")) {
+    if (err.message && err.message.includes("ya está registrado")) {
       return res.status(409).json({ error: err.message });
     }
     res.status(500).json({ error: err.message });
