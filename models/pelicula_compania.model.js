@@ -13,5 +13,16 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  PeliculaCompania.associate = (models) => {
+    PeliculaCompania.belongsTo(models.Pelicula, {
+      foreignKey: "id_pelicula",
+      as: "pelicula"
+    });
+    PeliculaCompania.belongsTo(models.Compania, {
+      foreignKey: "id_compania",
+      as: "compania"
+    });
+  };
+
   return PeliculaCompania;
 };

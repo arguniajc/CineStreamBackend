@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  // Asociaciones (IMPORTANTE)
   PeliculaActor.associate = (models) => {
     PeliculaActor.belongsTo(models.Actor, {
       foreignKey: "id_actor",

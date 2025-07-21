@@ -44,5 +44,38 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  Pelicula.associate = (models) => {
+    Pelicula.belongsToMany(models.Actor, {
+      through: models.PeliculaActor,
+      foreignKey: "id_pelicula",
+      otherKey: "id_actor",
+      as: "actores"
+    });
+    Pelicula.belongsToMany(models.Director, {
+      through: models.PeliculaDirector,
+      foreignKey: "id_pelicula",
+      otherKey: "id_director",
+      as: "directores"
+    });
+    Pelicula.belongsToMany(models.Compania, {
+      through: models.PeliculaCompania,
+      foreignKey: "id_pelicula",
+      otherKey: "id_compania",
+      as: "companias"
+    });
+    Pelicula.belongsToMany(models.Genero, {
+      through: models.PeliculaGenero,
+      foreignKey: "id_pelicula",
+      otherKey: "id_genero",
+      as: "generos"
+    });
+    Pelicula.belongsToMany(models.Idioma, {
+      through: models.PeliculaIdioma,
+      foreignKey: "id_pelicula",
+      otherKey: "id_idioma",
+      as: "idiomas"
+    });
+  };
+
   return Pelicula;
 };

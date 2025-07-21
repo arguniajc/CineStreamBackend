@@ -3,6 +3,7 @@ const cors = require("cors");
 const db = require("./models");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -28,7 +29,6 @@ app.use("/api/idioma", idiomaRoutes);
 const peliculaActorRoutes = require("./routes/pelicula_actor.route");
 app.use("/api/pelicula-actor", peliculaActorRoutes);
 
-
 const peliculaDirectorRoutes = require("./routes/pelicula_director.routes");
 app.use("/api/pelicula_director", peliculaDirectorRoutes);
 
@@ -39,13 +39,11 @@ const peliculaIdiomaRoutes = require("./routes/pelicula_idioma.route");
 app.use("/api/pelicula-idioma", peliculaIdiomaRoutes);
 
 const peliculaGeneroRoutes = require("./routes/pelicula_genero.routes");
-app.use("/api/pelicula-genero", peliculaGeneroRoutes)
+app.use("/api/pelicula-genero", peliculaGeneroRoutes);
 
-// Sincronización de base de datos
+// Sincroniza base de datos
 db.sequelize.sync().then(() => {
   console.log("Base de datos sincronizada");
 });
-
-
 
 module.exports = app;

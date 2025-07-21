@@ -1,7 +1,7 @@
 const db = require("../models");
 const PeliculaActor = db.PeliculaActor;
 
-// 🔍 Obtener todas las relaciones
+// Obtener todas las relaciones Película-Actor
 exports.findAll = async () => {
   return await PeliculaActor.findAll({
     attributes: ["id_pelicula", "id_actor", "personaje"],
@@ -20,7 +20,7 @@ exports.findAll = async () => {
   });
 };
 
-// 🔍 Obtener una relación específica
+// Obtener una relación específica por IDs
 exports.findOne = async (id_pelicula, id_actor) => {
   return await PeliculaActor.findOne({
     where: { id_pelicula, id_actor },
@@ -40,18 +40,16 @@ exports.findOne = async (id_pelicula, id_actor) => {
   });
 };
 
-// ➕ Crear una nueva relación
+// Crear una nueva relación Película-Actor
 exports.create = async (data) => {
   return await PeliculaActor.create(data);
 };
 
-// 🔁 Actualizar la relación: permite cambiar IDs
-// services/pelicula_actor.service.js
-
+// Actualizar una relación (puede cambiar los IDs)
 exports.update = async (id_pelicula, id_actor, nuevosDatos) => {
   const transaction = await db.sequelize.transaction();
   try {
-    // 1. Verifica si ya existe la relación nueva (para evitar duplicados)
+    // Verifica si la nueva relación ya existe
     const yaExiste = await PeliculaActor.findOne({
       where: {
         id_pelicula: nuevosDatos.id_pelicula,
@@ -63,13 +61,13 @@ exports.update = async (id_pelicula, id_actor, nuevosDatos) => {
       throw new Error("La nueva relación ya existe");
     }
 
-    // 2. Elimina la anterior
+    // Elimina la relación anterior
     await PeliculaActor.destroy({
       where: { id_pelicula, id_actor },
       transaction
     });
 
-    // 3. Crea la nueva
+    // Crea la nueva relación
     const nuevaRelacion = await PeliculaActor.create(nuevosDatos, { transaction });
 
     await transaction.commit();
@@ -80,8 +78,7 @@ exports.update = async (id_pelicula, id_actor, nuevosDatos) => {
   }
 };
 
-
-// ❌ Eliminar una relación
+// Eliminar una relación por IDs
 exports.remove = async (id_pelicula, id_actor) => {
   await PeliculaActor.destroy({ where: { id_pelicula, id_actor } });
 };
