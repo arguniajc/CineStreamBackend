@@ -1,10 +1,12 @@
+require("dotenv").config(); // Al principio del archivo
+
 module.exports = {
-  HOST: "dpg-d1nu8rbipnbc73b5mf50-a.oregon-postgres.render.com",
-  USER: "bdreelstorm_ci9o_user",
-  PASSWORD: "OhHzifyB04BG2FiWKg9EnUQUWz47Rzvp",
-  DB: "bdreelstorm_ci9o",
-  dialect: "postgres",
-  port: 5432,
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.DB_PASSWORD,
+  DB: process.env.DB_NAME,
+  dialect: process.env.DB_DIALECT,
+  port: process.env.DB_PORT,
   pool: {
     max: 5,
     min: 0,
