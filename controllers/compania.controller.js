@@ -1,21 +1,21 @@
-const actorService = require("../services/actor.service");
+const companiaService = require("../services/compania.service");
 
-// Crea uno o varios actores
+// Crea una o varias compañías
 exports.create = async (req, res) => {
   try {
-    const result = await actorService.create(req.body);
+    const result = await companiaService.create(req.body);
 
-    // Si se reciben múltiples actores (arreglo)
+    // Si se recibe un arreglo de compañías
     if (Array.isArray(req.body)) {
-      // Todos los actores ya estaban registrados
+      // Todas las compañías ya estaban registradas
       if (result.insertados.length === 0 && result.omitidos.length > 0) {
         return res.status(409).json({
-          mensaje: "Todos los actores ya estaban registrados.",
+          mensaje: "Todas las compañías ya estaban registradas.",
           omitidos: result.omitidos
         });
       }
 
-      // Algunos actores fueron insertados correctamente
+      // Algunas se insertaron correctamente
       return res.status(201).json(result);
     }
 
@@ -23,33 +23,33 @@ exports.create = async (req, res) => {
     return res.status(201).json(result);
 
   } catch (err) {
-    // Actor duplicado
-    if (err.message && err.message.includes("ya está registrado")) {
+    // Compañía duplicada
+    if (err.message && err.message.includes("ya está registrada")) {
       return res.status(409).json({ error: err.message });
     }
 
-    // Error interno del servidor
+    // Error interno
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtiene todos los actores
+// Obtiene todas las compañías
 exports.findAll = async (req, res) => {
   try {
-    const result = await actorService.findAll();
+    const result = await companiaService.findAll();
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtiene un actor por ID
+// Obtiene una compañía por ID
 exports.findOne = async (req, res) => {
   try {
-    const result = await actorService.findOne(req.params.id);
+    const result = await companiaService.findOne(req.params.id);
 
     if (!result) {
-      return res.status(404).json({ message: "Actor no encontrado" });
+      return res.status(404).json({ message: "Compañía no encontrada" });
     }
 
     res.json(result);
@@ -58,21 +58,21 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Actualiza un actor por ID
+// Actualiza una compañía por ID
 exports.update = async (req, res) => {
   try {
-    const result = await actorService.update(req.params.id, req.body);
-    res.json({ message: "Actor actualizado", result });
+    const result = await companiaService.update(req.params.id, req.body);
+    res.json({ message: "Compañía actualizada", result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Elimina un actor por ID
+// Elimina una compañía por ID
 exports.delete = async (req, res) => {
   try {
-    await actorService.remove(req.params.id);
-    res.json({ message: "Actor eliminado" });
+    await companiaService.remove(req.params.id);
+    res.json({ message: "Compañía eliminada" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

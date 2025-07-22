@@ -1,29 +1,29 @@
-const actorService = require("../services/actor.service");
+const idiomaService = require("../services/idioma.service");
 
-// Crea uno o varios actores
+// Crea uno o varios idiomas
 exports.create = async (req, res) => {
   try {
-    const result = await actorService.create(req.body);
+    const result = await idiomaService.create(req.body);
 
-    // Si se reciben múltiples actores (arreglo)
+    // Si se envió un arreglo de idiomas
     if (Array.isArray(req.body)) {
-      // Todos los actores ya estaban registrados
+      // Todos los idiomas ya estaban registrados
       if (result.insertados.length === 0 && result.omitidos.length > 0) {
         return res.status(409).json({
-          mensaje: "Todos los actores ya estaban registrados.",
+          mensaje: "Todos los idiomas ya estaban registrados.",
           omitidos: result.omitidos
         });
       }
 
-      // Algunos actores fueron insertados correctamente
+      // Algunos idiomas se insertaron
       return res.status(201).json(result);
     }
 
-    // Inserción individual exitosa
+    // Se insertó un único idioma
     return res.status(201).json(result);
 
   } catch (err) {
-    // Actor duplicado
+    // Conflicto por idioma ya existente
     if (err.message && err.message.includes("ya está registrado")) {
       return res.status(409).json({ error: err.message });
     }
@@ -33,23 +33,23 @@ exports.create = async (req, res) => {
   }
 };
 
-// Obtiene todos los actores
+// Obtiene todos los idiomas registrados
 exports.findAll = async (req, res) => {
   try {
-    const result = await actorService.findAll();
+    const result = await idiomaService.findAll();
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtiene un actor por ID
+// Obtiene un idioma por ID
 exports.findOne = async (req, res) => {
   try {
-    const result = await actorService.findOne(req.params.id);
+    const result = await idiomaService.findOne(req.params.id);
 
     if (!result) {
-      return res.status(404).json({ message: "Actor no encontrado" });
+      return res.status(404).json({ message: "Idioma no encontrado" });
     }
 
     res.json(result);
@@ -58,21 +58,21 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Actualiza un actor por ID
+// Actualiza un idioma por ID
 exports.update = async (req, res) => {
   try {
-    const result = await actorService.update(req.params.id, req.body);
-    res.json({ message: "Actor actualizado", result });
+    const result = await idiomaService.update(req.params.id, req.body);
+    res.json({ message: "Idioma actualizado", result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Elimina un actor por ID
+// Elimina un idioma por ID
 exports.delete = async (req, res) => {
   try {
-    await actorService.remove(req.params.id);
-    res.json({ message: "Actor eliminado" });
+    await idiomaService.remove(req.params.id);
+    res.json({ message: "Idioma eliminado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -1,33 +1,30 @@
 const db = require("../models");
 const Pelicula = db.Pelicula;
+const insertarSinDuplicados = require("../utils/insertarSinDuplicados");
 
-// Crear película
+// Crea una o varias películas, evitando duplicados por "titulo_espanol"
 exports.create = async (data) => {
-  return await Pelicula.create(data);
+  return await insertarSinDuplicados(Pelicula, "titulo_espanol", data);
 };
 
-// Obtener todas las películas (incluyendo relaciones)
+// Retorna todas las películas registradas
 exports.findAll = async () => {
-  return await Pelicula.findAll({
-    include: [db.Actor, db.Director, db.Compania, db.Genero, db.Idioma]
-  });
+  return await Pelicula.findAll();
 };
 
-// Obtener una película por ID (incluyendo relaciones)
+// Retorna una película específica por ID
 exports.findOne = async (id) => {
-  return await Pelicula.findByPk(id, {
-    include: [db.Actor, db.Director, db.Compania, db.Genero, db.Idioma]
-  });
+  return await Pelicula.findByPk(id);
 };
 
-// Actualizar película por ID
+// Actualiza una película por ID
 exports.update = async (id, data) => {
   return await Pelicula.update(data, {
     where: { id }
   });
 };
 
-// Eliminar película por ID
+// Elimina una película por ID
 exports.remove = async (id) => {
   return await Pelicula.destroy({
     where: { id }

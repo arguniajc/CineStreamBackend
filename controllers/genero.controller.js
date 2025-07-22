@@ -1,21 +1,21 @@
-const actorService = require("../services/actor.service");
+const generoService = require("../services/genero.service");
 
-// Crea uno o varios actores
+// Crea uno o varios géneros
 exports.create = async (req, res) => {
   try {
-    const result = await actorService.create(req.body);
+    const result = await generoService.create(req.body);
 
-    // Si se reciben múltiples actores (arreglo)
+    // Si se recibe un arreglo de géneros
     if (Array.isArray(req.body)) {
-      // Todos los actores ya estaban registrados
+      // Todos los géneros ya estaban registrados
       if (result.insertados.length === 0 && result.omitidos.length > 0) {
         return res.status(409).json({
-          mensaje: "Todos los actores ya estaban registrados.",
+          mensaje: "Todos los géneros ya estaban registrados.",
           omitidos: result.omitidos
         });
       }
 
-      // Algunos actores fueron insertados correctamente
+      // Algunos se insertaron correctamente
       return res.status(201).json(result);
     }
 
@@ -23,33 +23,33 @@ exports.create = async (req, res) => {
     return res.status(201).json(result);
 
   } catch (err) {
-    // Actor duplicado
-    if (err.message && err.message.includes("ya está registrado")) {
+    // Género ya registrado
+    if (err.message.includes("ya está registrado")) {
       return res.status(409).json({ error: err.message });
     }
 
-    // Error interno del servidor
+    // Error interno
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtiene todos los actores
+// Obtiene todos los géneros registrados
 exports.findAll = async (req, res) => {
   try {
-    const result = await actorService.findAll();
+    const result = await generoService.findAll();
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtiene un actor por ID
+// Obtiene un género por su ID
 exports.findOne = async (req, res) => {
   try {
-    const result = await actorService.findOne(req.params.id);
+    const result = await generoService.findOne(req.params.id);
 
     if (!result) {
-      return res.status(404).json({ message: "Actor no encontrado" });
+      return res.status(404).json({ message: "Género no encontrado" });
     }
 
     res.json(result);
@@ -58,21 +58,21 @@ exports.findOne = async (req, res) => {
   }
 };
 
-// Actualiza un actor por ID
+// Actualiza un género por ID
 exports.update = async (req, res) => {
   try {
-    const result = await actorService.update(req.params.id, req.body);
-    res.json({ message: "Actor actualizado", result });
+    const result = await generoService.update(req.params.id, req.body);
+    res.json({ message: "Género actualizado", result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Elimina un actor por ID
+// Elimina un género por ID
 exports.delete = async (req, res) => {
   try {
-    await actorService.remove(req.params.id);
-    res.json({ message: "Actor eliminado" });
+    await generoService.remove(req.params.id);
+    res.json({ message: "Género eliminado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
