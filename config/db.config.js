@@ -1,11 +1,9 @@
-require("dotenv").config(); // Al principio del archivo
-
 module.exports = {
-  HOST: process.env.DB_HOST,
-  USER: process.env.DB_USER,
-  PASSWORD: process.env.DB_PASSWORD,
-  DB: process.env.DB_NAME,
-  dialect: process.env.DB_DIALECT,
+  HOST: process.env.DB_HOST?.trim(),
+  USER: process.env.DB_USER?.trim(),
+  PASSWORD: process.env.DB_PASSWORD?.trim(),
+  DB: process.env.DB_NAME?.trim(),
+  dialect: process.env.DB_DIALECT?.trim(),
   port: process.env.DB_PORT,
   pool: {
     max: 5,
@@ -13,5 +11,4 @@ module.exports = {
     acquire: 30000,
     idle: 10000
   }
-}; 
-
+};
