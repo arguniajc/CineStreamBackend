@@ -1,6 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const dbConfig = require("../config/db.config");
 
+// Agrega logs para verificar que las variables se estén cargando correctamente
+console.log("✅ Dialecto recibido:", dbConfig.dialect);
+console.log("📦 Configuración DB completa:", dbConfig);
+
 // Configuración y conexión a la base de datos con Sequelize
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
