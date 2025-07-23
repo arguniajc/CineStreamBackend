@@ -11,9 +11,6 @@ router.get("/:id_pelicula/:id_genero", controller.findOne);
 // Crear una nueva relación Película-Género
 router.post("/", controller.create);
 
-// Actualizar una relación existente Película-Género
-router.put("/:id_pelicula/:id_genero", controller.update);
-
 // Eliminar una relación Película-Género
 router.delete("/:id_pelicula/:id_genero", controller.remove);
 

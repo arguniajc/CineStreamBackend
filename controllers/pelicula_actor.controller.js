@@ -35,29 +35,6 @@ exports.create = async (req, res) => {
   }
 };
 
-// Actualiza una relación existente (permite cambiar los IDs de película y/o actor)
-exports.update = async (req, res) => {
-  const { id_pelicula, id_actor } = req.params;
-  const nuevosDatos = req.body;
-
-  try {
-    const resultado = await service.update(id_pelicula, id_actor, nuevosDatos);
-    res.json(resultado);
-  } catch (error) {
-    // Caso especial: relación duplicada
-    if (error.message === "La nueva relación ya existe") {
-      res.status(400).json({
-        error: "Esta combinación de película y actor ya está registrada"
-      });
-    } else {
-      res.status(500).json({
-        error: "Error al actualizar la relación película-actor",
-        detalle: error.message
-      });
-    }
-  }
-};
-
 // Elimina una relación película-actor
 exports.remove = async (req, res) => {
   try {

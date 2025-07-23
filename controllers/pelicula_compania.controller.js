@@ -35,20 +35,6 @@ exports.create = async (req, res) => {
   }
 };
 
-// Actualiza una relación existente
-exports.update = async (req, res) => {
-  try {
-    const data = await service.update(
-      req.params.id_pelicula,
-      req.params.id_compania,
-      req.body
-    );
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ message: "Error al actualizar relación película-compañía", error });
-  }
-};
-
 // Elimina una relación película-compañía
 exports.remove = async (req, res) => {
   try {

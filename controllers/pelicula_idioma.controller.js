@@ -35,19 +35,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// Actualiza una relación existente
-exports.update = async (req, res) => {
-  try {
-    const data = await service.update(
-      req.params.id_pelicula,
-      req.params.id_idioma,
-      req.body
-    );
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ message: "Error al actualizar relación película-idioma", error });
-  }
-};
+
 
 // Elimina una relación película-idioma
 exports.remove = async (req, res) => {
