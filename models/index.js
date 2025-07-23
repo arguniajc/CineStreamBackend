@@ -1,11 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const dbConfig = require("../config/db.config");
 
-// Agrega logs para verificar que las variables se estén cargando correctamente
-console.log("✅ Dialecto recibido:", dbConfig.dialect);
-console.log("📦 Configuración DB completa:", dbConfig);
-
-// Configuración y conexión a la base de datos con Sequelize
+// Conexión a la base de datos
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   port: dbConfig.port,
@@ -22,11 +18,11 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 const db = {};
 
-// Guardamos referencias a Sequelize y la conexión
+// Referencias a Sequelize y la conexión
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Modelos principales (entidades)
+// Modelos principales
 db.Pelicula = require("./pelicula.model")(sequelize, DataTypes);
 db.Actor = require("./actor.model")(sequelize, DataTypes);
 db.Director = require("./director.model")(sequelize, DataTypes);
@@ -34,16 +30,14 @@ db.Compania = require("./compania.model")(sequelize, DataTypes);
 db.Genero = require("./genero.model")(sequelize, DataTypes);
 db.Idioma = require("./idioma.model")(sequelize, DataTypes);
 
-// Modelos intermedios para relaciones muchos a muchos (N:N)
+// Modelos intermedios (relaciones muchos a muchos)
 db.PeliculaActor = require("./pelicula_actor.model")(sequelize, DataTypes);
 db.PeliculaDirector = require("./pelicula_director.model")(sequelize, DataTypes);
 db.PeliculaCompania = require("./pelicula_compania.model")(sequelize, DataTypes);
 db.PeliculaGenero = require("./pelicula_genero.model")(sequelize, DataTypes);
 db.PeliculaIdioma = require("./pelicula_idioma.model")(sequelize, DataTypes);
 
-// Definición de relaciones N:N entre modelos
-
-// Película - Actor
+// Relaciones Película - Actor
 db.Pelicula.belongsToMany(db.Actor, {
   through: db.PeliculaActor,
   foreignKey: "id_pelicula",
@@ -59,7 +53,7 @@ db.Actor.belongsToMany(db.Pelicula, {
 db.PeliculaActor.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "pelicula" });
 db.PeliculaActor.belongsTo(db.Actor, { foreignKey: "id_actor", as: "actor" });
 
-// Película - Director
+// Relaciones Película - Director
 db.Pelicula.belongsToMany(db.Director, {
   through: db.PeliculaDirector,
   foreignKey: "id_pelicula",
@@ -75,7 +69,7 @@ db.Director.belongsToMany(db.Pelicula, {
 db.PeliculaDirector.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "pelicula" });
 db.PeliculaDirector.belongsTo(db.Director, { foreignKey: "id_director", as: "director" });
 
-// Película - Compañía
+// Relaciones Película - Compañía
 db.Pelicula.belongsToMany(db.Compania, {
   through: db.PeliculaCompania,
   foreignKey: "id_pelicula",
@@ -91,7 +85,7 @@ db.Compania.belongsToMany(db.Pelicula, {
 db.PeliculaCompania.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "pelicula" });
 db.PeliculaCompania.belongsTo(db.Compania, { foreignKey: "id_compania", as: "compania" });
 
-// Película - Género
+// Relaciones Película - Género
 db.Pelicula.belongsToMany(db.Genero, {
   through: db.PeliculaGenero,
   foreignKey: "id_pelicula",
@@ -107,7 +101,7 @@ db.Genero.belongsToMany(db.Pelicula, {
 db.PeliculaGenero.belongsTo(db.Pelicula, { foreignKey: "id_pelicula", as: "pelicula" });
 db.PeliculaGenero.belongsTo(db.Genero, { foreignKey: "id_genero", as: "genero" });
 
-// Película - Idioma
+// Relaciones Película - Idioma
 db.Pelicula.belongsToMany(db.Idioma, {
   through: db.PeliculaIdioma,
   foreignKey: "id_pelicula",
