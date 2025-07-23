@@ -28,5 +28,17 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  // Relación con Actor y Pelicula
+  PeliculaActor.associate = (models) => {
+    PeliculaActor.belongsTo(models.Actor, {
+      foreignKey: "id_actor",
+      as: "actor"
+    });
+    PeliculaActor.belongsTo(models.Pelicula, {
+      foreignKey: "id_pelicula",
+      as: "pelicula"
+    });
+  };
+
   return PeliculaActor;
 };

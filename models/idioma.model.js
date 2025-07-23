@@ -18,5 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  // Relación muchos a muchos con Pelicula
+  Idioma.associate = (models) => {
+    Idioma.belongsToMany(models.Pelicula, {
+      through: models.PeliculaIdioma,
+      foreignKey: "id_idioma",
+      otherKey: "id_pelicula",
+      as: "peliculas"
+    });
+  };
+
   return Idioma;
 };

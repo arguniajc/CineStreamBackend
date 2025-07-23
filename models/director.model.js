@@ -22,5 +22,15 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  // Relación muchos a muchos con Pelicula
+  Director.associate = (models) => {
+    Director.belongsToMany(models.Pelicula, {
+      through: models.PeliculaDirector,
+      foreignKey: "id_director",
+      otherKey: "id_pelicula",
+      as: "peliculas"
+    });
+  };
+
   return Director;
 };

@@ -24,5 +24,17 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  // Relación con Pelicula y Genero
+  PeliculaGenero.associate = (models) => {
+    PeliculaGenero.belongsTo(models.Pelicula, {
+      foreignKey: "id_pelicula",
+      as: "pelicula"
+    });
+    PeliculaGenero.belongsTo(models.Genero, {
+      foreignKey: "id_genero",
+      as: "genero"
+    });
+  };
+
   return PeliculaGenero;
 };

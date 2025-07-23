@@ -24,5 +24,17 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  // Relación con Pelicula y Compania
+  PeliculaCompania.associate = (models) => {
+    PeliculaCompania.belongsTo(models.Pelicula, {
+      foreignKey: "id_pelicula",
+      as: "pelicula"
+    });
+    PeliculaCompania.belongsTo(models.Compania, {
+      foreignKey: "id_compania",
+      as: "compania"
+    });
+  };
+
   return PeliculaCompania;
 };
